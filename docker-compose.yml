@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8.0 # Versão do MySQL
+    container_name: rubyMysql_container
+    restart: always
+    ports:
+      - "3306:3306" # Porta exposta
+    environment:
+      MYSQL_ROOT_PASSWORD: root # Senha para o usuário root
+      MYSQL_DATABASE: ruby_data # Banco de dados inicial
+      MYSQL_USER: user # Usuário padrão
+      MYSQL_PASSWORD: senha # Senha do usuário padrão
+    volumes:
+      - db_data:/var/lib/mysql # Persistência dos dados
+
+volumes:
+  db_data:
