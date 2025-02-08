@@ -22,7 +22,7 @@ public class Invoice {
     private long id;
 
     private LocalDate dueDate;
-    private LocalDate closeDate;
+    private LocalDate issueDay;
     private LocalDateTime paymentDate;
 
     private Long finalValue;

@@ -1,6 +1,5 @@
 package com.gymmanager.ruby.model.invoice;
 
-import java.time.LocalDate;
 import java.util.Collection;
 
 import com.gymmanager.ruby.model.customer.GymClient;
@@ -11,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Entity
@@ -22,9 +22,8 @@ public class PaymentSchedule {
     private Long id;
     
     private Integer dueDay;
+    private Integer issueDay;
 
-    @OneToMany
-    @JoinColumn(name = "clients_id")
-    private Collection<GymClient> clients;
-
+    @OneToOne
+    private GymClient gymClient;
 }

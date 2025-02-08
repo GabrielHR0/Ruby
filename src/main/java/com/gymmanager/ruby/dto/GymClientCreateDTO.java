@@ -11,4 +11,5 @@ public class GymClientCreateDTO {
     private String lastName;
     private PersonAdress adress;
     
+    
 }

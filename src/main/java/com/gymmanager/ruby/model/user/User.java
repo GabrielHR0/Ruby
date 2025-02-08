@@ -2,7 +2,6 @@ package com.gymmanager.ruby.model.user;
 
 import java.time.LocalDate;
 
-import org.antlr.v4.runtime.misc.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

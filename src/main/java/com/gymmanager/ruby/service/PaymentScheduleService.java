@@ -1,6 +1,8 @@
 package com.gymmanager.ruby.service;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,45 +17,27 @@ public class PaymentScheduleService {
     @Autowired
     private PaymentScheduleRepository paymentScheduleRepository;
 
-    private static final int DAYS_BEFORE_CLOSURE = 5; // Diferença entre vencimento e fechamento
-    private static final int MAX_DAYS_AHEAD = 15;    // Limite de dias para a data de vencimento
+    private LocalDate nowDate = LocalDate.now();
+    private Month nowMonth = nowDate.getMonth();
 
-    public void create(int dueDay, GymClient gymClient) throws Exception {
-        LocalDate today = LocalDate.now();
-        LocalDate dueDate = LocalDate.of(today.getYear(), today.getMonth(), dueDay);
-
-        validateDueDate(dueDate);
-
-        int closeDay = calculateCloseDay(dueDate);
-
-        PaymentSchedule paymentDay = new PaymentSchedule();
-        paymentDay.setDueDay(dueDay);
-
-        paymentDay.getClients().add(gymClient);
-
-        paymentScheduleRepository.save(paymentDay);
+    public void validadeDueDay(PaymentSchedule paymentSchedule) {
+        try {
+            LocalDate DueDate = dayToDate(paymentSchedule);
+            if (DueDate.isBefore(nowDate)) {
+                throw new RuntimeException("A data de vencimento não pode ser anterior à data atual")
+            }
+        } catch (Exception e){
+            throw new RuntimeException("Erro ao criar data de vencimento: ", e);
+        }
+        
     }
 
-    private int calculateCloseDay(LocalDate dueDate) {
-
-        LocalDate closeDate = dueDate.minusDays(DAYS_BEFORE_CLOSURE);
-        return closeDate.getDayOfMonth();
-
-    }
-
-    private void validateDueDate(LocalDate dueDate) throws Exception {
-        if (dueDate == null) {
-            throw new Exception("A data de vencimento não pode ser nula!");
-        }
-
-        LocalDate today = LocalDate.now();
-
-        if (dueDate.isBefore(today)) {
-            throw new Exception("A data de vencimento não pode ser anterior à data atual!");
-        }
-
-        if (dueDate.isAfter(today.plusDays(MAX_DAYS_AHEAD))) {
-            throw new Exception("A data de vencimento não pode exceder " + MAX_DAYS_AHEAD + " dias a partir da data atual!");
+    public LocalDate dayToDate(PaymentSchedule paymentSchedule) {
+        try {
+            LocalDate DueDate = LocalDate.of(paymentSchedule.getDueDay(), nowMonth.getValue(), nowDate.getYear());
+            return DueDate;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao definir data de vencimento: ", e);
         }
     }
 }

@@ -22,6 +22,7 @@ public class GymClientService {
 
         while (ClientRepository.existsByRegistration(generateRegistration)){
             generateRegistration = registration.gerarMatricula();
+            
         }
 
         GymClient client = new GymClient();
@@ -30,7 +31,7 @@ public class GymClientService {
         client.setLastName(clientDTO.getLastName());
         client.setAddress(clientDTO.getAdress());
 
-        client.setRegistration(registration.gerarMatricula());
+        client.setRegistration(generateRegistration);
         return ClientRepository.save(client);
     }
 
